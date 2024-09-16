@@ -1,0 +1,69 @@
+# Compressed files
+*.zip
+*.tar
+*.rar
+*.gz
+
+# Video files
+*.avi
+*.mp4
+
+# Data files
+*.csv
+*.xls
+
+# LaTeX related files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.synctex.gz
+
+# Temporary/Backup files
+*.swp
+*.vrb
+
+# Development files
+*.html
+*.js
+*.lmk
+*.pth
+
+# Tag files
+*.tag*
+*.tags
+
+# System files
+*.DS_Store
+*.exe
+*.czrc
+
+# General directories to ignore
+.vscode/
+__MACOSX/
+__pycache__/
+
+# Specific directories to ignore
+Trial*/
+*_contours/
+*_endpoints/
+*_frames/
+*_overlayed_images/
+*_skeletonized_masks/
+
+# Virtual Machine Files
+*.vmdk
+*.mf
+*.ovf
+*.ova
+*.qcow2
+*VM*
+
+# C++ Intermediate Files
+*.o
+*.out
+*.in
