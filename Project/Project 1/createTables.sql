@@ -118,19 +118,23 @@ CREATE TABLE Albums(
     album_visibility VARCHAR2(100) NOT NULL,
     cover_photo_id INTEGER NOT NULL,
     CHECK (
-        album_visibility = 'Public'
+        album_visibility = 'Everyone'
         or album_visibility = 'Friends'
-        or album_visibility = 'Only_Me'
+        or album_visibility = 'Friends_Of_Friends'
+        or album_visibility = 'Myself'
     ),
     FOREIGN KEY (album_owner_id) REFERENCES Users(user_id)
 );
 
 CREATE TABLE Tags(
-    tag_photo_id INTEGER PRIMARY KEY,
+    tag_photo_id INTEGER,
     tag_subject_id INTEGER NOT NULL,
     tag_created_time TIMESTAMP NOT NULL,
     tag_x NUMBER NOT NULL,
-    tag_y NUMBER NOT NULL
+    tag_y NUMBER NOT NULL,
+    PRIMARY KEY (tag_photo_id, tag_subject_id),
+    FOREIGN KEY (tag_photo_id) REFERENCES Photos(photo_id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_subject_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
 -- FOREIGN KEY
@@ -143,45 +147,6 @@ ALTER TABLE
     Albums
 ADD
     CONSTRAINT fk_cover_photo FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id) INITIALLY DEFERRED DEFERRABLE;
-
--- user_id_trigger
-CREATE SEQUENCE user_seq START WITH 1 INCREMENT BY 1;
-
-CREATE TRIGGER user_id_trigger BEFORE
-INSERT
-    ON Users FOR EACH ROW BEGIN
-SELECT
-    user_seq.NEXTVAL INTO :NEW.user_id
-FROM
-    dual;
-
-END;
-
-/ -- city_id_trigger
-CREATE SEQUENCE city_seq START WITH 1 INCREMENT BY 1;
-
-CREATE TRIGGER city_id_trigger BEFORE
-INSERT
-    ON Cities FOR EACH ROW BEGIN
-SELECT
-    city_seq.NEXTVAL INTO :NEW.city_id
-FROM
-    dual;
-
-END;
-
-/ -- program_id_trigger
-CREATE SEQUENCE program_seq START WITH 1 INCREMENT BY 1;
-
-CREATE TRIGGER program_id_trigger BEFORE
-INSERT
-    ON Programs FOR EACH ROW BEGIN
-SELECT
-    program_seq.NEXTVAL INTO :NEW.program_id
-FROM
-    dual;
-
-END;
 
 / -- Order_Friend_Pairs
 CREATE TRIGGER Order_Friend_Pairs BEFORE
@@ -198,4 +163,38 @@ END IF;
 
 END;
 
-/
+/ -- user_id_trigger
+-- CREATE SEQUENCE user_seq START WITH 1 INCREMENT BY 1;
+-- CREATE TRIGGER user_id_trigger BEFORE
+-- INSERT
+--     ON Users FOR EACH ROW BEGIN
+-- SELECT
+--     user_seq.NEXTVAL INTO :NEW.user_id
+-- FROM
+--     DUAL;
+-- END;
+/ -- city_id_trigger
+CREATE SEQUENCE city_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TRIGGER city_id_trigger BEFORE
+INSERT
+    ON Cities FOR EACH ROW BEGIN
+SELECT
+    city_seq.NEXTVAL INTO :NEW.city_id
+FROM
+    DUAL;
+
+END;
+
+/ -- program_id_trigger
+CREATE SEQUENCE program_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TRIGGER program_id_trigger BEFORE
+INSERT
+    ON Programs FOR EACH ROW BEGIN
+SELECT
+    program_seq.NEXTVAL INTO :NEW.program_id
+FROM
+    DUAL;
+
+END;
