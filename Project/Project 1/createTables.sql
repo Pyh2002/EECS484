@@ -157,9 +157,7 @@ FROM
 
 END;
 
-/ 
-
--- city_id_trigger
+/ -- city_id_trigger
 CREATE SEQUENCE city_seq START WITH 1 INCREMENT BY 1;
 
 CREATE TRIGGER city_id_trigger BEFORE
@@ -172,9 +170,7 @@ FROM
 
 END;
 
-/ 
-
--- program_id_trigger
+/ -- program_id_trigger
 CREATE SEQUENCE program_seq START WITH 1 INCREMENT BY 1;
 
 CREATE TRIGGER program_id_trigger BEFORE
@@ -187,9 +183,7 @@ FROM
 
 END;
 
-/ 
-
--- Order_Friend_Pairs
+/ -- Order_Friend_Pairs
 CREATE TRIGGER Order_Friend_Pairs BEFORE
 INSERT
     ON Friends FOR EACH ROW DECLARE temp INTEGER;
