@@ -99,6 +99,15 @@ CREATE TABLE Participants(
     )
 );
 
+CREATE TABLE Photos(
+    photo_id INTEGER PRIMARY KEY,
+    album_id INTEGER NOT NULL,
+    photo_caption VARCHAR2(2000),
+    photo_created_time TIMESTAMP NOT NULL,
+    photo_modified_time TIMESTAMP,
+    photo_link VARCHAR2(2000) NOT NULL
+);
+
 CREATE TABLE Albums(
     album_id INTEGER PRIMARY KEY,
     album_owner_id INTEGER NOT NULL,
@@ -112,17 +121,8 @@ CREATE TABLE Albums(
         album_visibility = 'Public'
         or album_visibility = 'Friends'
         or album_visibility = 'Only_Me'
-    ) FOREIGN KEY (album_owner_id) REFERENCES Users(user_id),
-    FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id)
-);
-
-CREATE TABLE Photos(
-    photo_id INTEGER PRIMARY KEY,
-    album_id INTEGER NOT NULL,
-    photo_caption VARCHAR2(2000),
-    photo_created_time TIMESTAMP NOT NULL,
-    photo_modified_time TIMESTAMP,
-    photo_link VARCHAR2(2000) NOT NULL
+    ),
+    FOREIGN KEY (album_owner_id) REFERENCES Users(user_id)
 );
 
 CREATE TABLE Tags(
@@ -132,11 +132,6 @@ CREATE TABLE Tags(
     tag_x NUMBER NOT NULL,
     tag_y NUMBER NOT NULL
 );
-
--- SEQUENCE
-CREATE SEQUENCE user_seq START WITH 1 INCREMENT BY 1;
-
-CREATE SEQUENCE city_seq START WITH 1 INCREMENT BY 1;
 
 -- FOREIGN KEY
 ALTER TABLE
@@ -149,7 +144,9 @@ ALTER TABLE
 ADD
     CONSTRAINT fk_cover_photo FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id) INITIALLY DEFERRED DEFERRABLE;
 
--- TRIGGER
+-- user_id_trigger
+CREATE SEQUENCE user_seq START WITH 1 INCREMENT BY 1;
+
 CREATE TRIGGER user_id_trigger BEFORE
 INSERT
     ON Users FOR EACH ROW BEGIN
@@ -160,7 +157,40 @@ FROM
 
 END;
 
-A / CREATE TRIGGER Order_Friend_Pairs BEFORE
+/ 
+
+-- city_id_trigger
+CREATE SEQUENCE city_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TRIGGER city_id_trigger BEFORE
+INSERT
+    ON Cities FOR EACH ROW BEGIN
+SELECT
+    city_seq.NEXTVAL INTO :NEW.city_id
+FROM
+    dual;
+
+END;
+
+/ 
+
+-- program_id_trigger
+CREATE SEQUENCE program_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TRIGGER program_id_trigger BEFORE
+INSERT
+    ON Programs FOR EACH ROW BEGIN
+SELECT
+    program_seq.NEXTVAL INTO :NEW.program_id
+FROM
+    dual;
+
+END;
+
+/ 
+
+-- Order_Friend_Pairs
+CREATE TRIGGER Order_Friend_Pairs BEFORE
 INSERT
     ON Friends FOR EACH ROW DECLARE temp INTEGER;
 

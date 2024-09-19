@@ -1,39 +1,45 @@
-DROP TABLE IF EXISTS Users;
-
-DROP TABLE IF EXISTS Friends;
-
-DROP TABLE IF EXISTS Cities;
-
-DROP TABLE IF EXISTS User_Current_Cities;
-
-DROP TABLE IF EXISTS User_Hometown_Cities;
-
-DROP TABLE IF EXISTS Messages;
-
-DROP TABLE IF EXISTS Programs;
-
-DROP TABLE IF EXISTS Education;
-
-DROP TABLE IF EXISTS User_Events;
-
-DROP TABLE IF EXISTS Participants;
-
-DROP TABLE IF EXISTS Albums;
-
-DROP TABLE IF EXISTS Photos;
-
-DROP TABLE IF EXISTS Tags;
-
-DROP TRIGGER IF EXISTS user_id_trigger;
-
-DROP TRIGGER IF EXISTS Order_Friend_Pairs;
-
-DROP SEQUENCE IF EXISTS user_seq;
-
-DROP SEQUENCE IF EXISTS city_seq;
+DROP TRIGGER Order_Friend_Pairs;
 
 ALTER TABLE
-    Photos DROP CONSTRAINT IF EXISTS fk_album;
+    Albums DROP CONSTRAINT fk_cover_photo;
 
 ALTER TABLE
-    Albums DROP CONSTRAINT IF EXISTS fk_cover_photo;
+    Photos DROP CONSTRAINT fk_album;
+
+DROP SEQUENCE program_seq;
+
+DROP SEQUENCE city_seq;
+
+DROP SEQUENCE user_seq;
+
+DROP TRIGGER program_id_trigger;
+
+DROP TRIGGER city_id_trigger;
+
+DROP TRIGGER user_id_trigger;
+
+DROP TABLE Tags;
+
+DROP TABLE Photos;
+
+DROP TABLE Albums;
+
+DROP TABLE Participants;
+
+DROP TABLE User_Events;
+
+DROP TABLE Education;
+
+DROP TABLE Programs;
+
+DROP TABLE Messages;
+
+DROP TABLE User_Hometown_Cities;
+
+DROP TABLE User_Current_Cities;
+
+DROP TABLE Cities;
+
+DROP TABLE Friends;
+
+DROP TABLE Users;
