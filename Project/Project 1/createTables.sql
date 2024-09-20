@@ -148,7 +148,7 @@ ALTER TABLE
 ADD
     CONSTRAINT fk_cover_photo FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id) INITIALLY DEFERRED DEFERRABLE;
 
-/ -- Order_Friend_Pairs
+-- Order_Friend_Pairs
 CREATE TRIGGER Order_Friend_Pairs BEFORE
 INSERT
     ON Friends FOR EACH ROW DECLARE temp INTEGER;
@@ -163,7 +163,8 @@ END IF;
 
 END;
 
-/ -- user_id_trigger
+/ 
+-- user_id_trigger
 -- CREATE SEQUENCE user_seq START WITH 1 INCREMENT BY 1;
 -- CREATE TRIGGER user_id_trigger BEFORE
 -- INSERT
@@ -173,7 +174,7 @@ END;
 -- FROM
 --     DUAL;
 -- END;
-/ -- city_id_trigger
+-- city_id_trigger
 CREATE SEQUENCE city_seq START WITH 1 INCREMENT BY 1;
 
 CREATE TRIGGER city_id_trigger BEFORE
@@ -186,7 +187,8 @@ FROM
 
 END;
 
-/ -- program_id_trigger
+/ 
+-- program_id_trigger
 CREATE SEQUENCE program_seq START WITH 1 INCREMENT BY 1;
 
 CREATE TRIGGER program_id_trigger BEFORE
@@ -198,3 +200,5 @@ FROM
     DUAL;
 
 END;
+
+/
