@@ -54,6 +54,7 @@ Trial*/
 *_frames/
 *_overlayed_images/
 *_skeletonized_masks/
+zsk/
 
 # Virtual Machine Files
 *.vmdk
