@@ -98,7 +98,7 @@ INSERT INTO
 SELECT
     DISTINCT Users.user_id,
     Programs.program_id,
-    program_year
+    project1.Public_User_Information.program_year
 FROM
     Users,
     Programs,
@@ -106,9 +106,9 @@ FROM
 WHERE
     Users.user_id = project1.Public_User_Information.user_id
     AND Programs.institution = project1.Public_User_Information.institution_name
-    AND Programs.concentration = project1.Public_User_Information.program_concentration;
+    AND Programs.concentration = project1.Public_User_Information.program_concentration
+    AND Programs.degree = project1.Public_User_Information.program_degree;
 
--- Changed from program_concentration to concentration
 INSERT INTO
     User_Events (
         event_id,
@@ -143,6 +143,27 @@ FROM
     LEFT JOIN cities ON pub_event.event_state = cities.state_name
     LEFT JOIN cities ON pub_event.event_country = cities.country_name;
 
+SET AUTOCOMMIT OFF;
+
+INSERT INTO
+    Photos (
+        photo_id,
+        album_id,
+        photo_caption,
+        photo_created_time,
+        photo_modified_time,
+        photo_link
+    )
+SELECT
+    DISTINCT photo_id,
+    album_id,
+    photo_caption,
+    photo_created_time,
+    photo_modified_time,
+    photo_link
+FROM
+    project1.Public_Photo_Information;
+
 INSERT INTO
     Albums (
         album_id,
@@ -166,24 +187,9 @@ SELECT
 FROM
     project1.Public_Photo_Information;
 
-INSERT INTO
-    Photos (
-        photo_id,
-        album_id,
-        photo_caption,
-        photo_created_time,
-        photo_modified_time,
-        photo_link
-    )
-SELECT
-    DISTINCT photo_id,
-    album_id,
-    photo_caption,
-    photo_created_time,
-    photo_modified_time,
-    photo_link
-FROM
-    project1.Public_Photo_Information;
+COMMIT;
+
+SET AUTOCOMMIT ON;
 
 INSERT INTO
     Tags (
