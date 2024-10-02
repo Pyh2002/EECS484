@@ -1,0 +1,20 @@
+Students
+- SID (PK)
+- Name
+- Major
+
+Projects
+- PID (PK)
+- P_Name
+
+Courses
+- CID (PK)
+- C_Name
+
+Eembers
+- PID (PK)
+- SID (PK)
+
+Enrollments
+- CID (PK)
+- SID (PK)
