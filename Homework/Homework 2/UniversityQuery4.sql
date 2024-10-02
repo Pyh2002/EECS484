@@ -1,7 +1,28 @@
 CREATE VIEW StudentPairs AS
-SELECT DISTINCT e1.SID AS SID1, e2.SID AS SID2
-FROM Enrollments e1
-JOIN Enrollments e2 ON e1.CID = e2.CID AND e1.SID < e2.SID
-LEFT JOIN Members m1 ON e1.SID = m1.SID
-LEFT JOIN Members m2 ON e2.SID = m2.SID AND m1.PID = m2.PID
-WHERE m1.PID IS NULL;
+SELECT
+    DISTINCT s1.SID AS SID1,
+    s2.SID AS SID2
+FROM
+    Students s1,
+    Students s2,
+    Enrollments e1,
+    Enrollments e2
+WHERE
+    s1.SID < s2.SID
+    AND e1.CID = e2.CID
+    AND e1.SID = s1.SID
+    AND e2.SID = s2.SID
+MINUS
+SELECT
+    DISTINCT s1.SID AS SID1,
+    s2.SID AS SID2
+FROM
+    Students s1,
+    Students s2,
+    Members m1,
+    Members m2
+WHERE
+    s1.SID < s2.SID
+    AND m1.PID = m2.PID
+    AND m1.SID = s1.SID
+    AND m2.SID = s2.SID;
