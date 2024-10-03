@@ -41,5 +41,5 @@ WHERE
             AND s2.Subject = 'Fiction'
     )
 ORDER BY
-    a.Last_Name ASC,
-    a.First_Name ASC;
+    a.First_Name ASC,
+    a.Last_Name ASC;
