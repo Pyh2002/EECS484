@@ -10,4 +10,4 @@ WHERE
     AND a.Last_Name = 'Christie'
     AND a.First_Name = 'Agatha'
 ORDER BY
-    e.ISBN ASC;
+    e.ISBN DESC;

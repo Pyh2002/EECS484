@@ -18,7 +18,7 @@
 --     a.Last_Name ASC,
 --     a.First_Name ASC;
 SELECT
-    DISTINCT a.First_Name,
+    a.First_Name,
     a.Last_Name
 FROM
     Authors a
