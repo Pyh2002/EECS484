@@ -40,15 +40,38 @@ public class GetData {
     // TODO: Implement this function
     @SuppressWarnings("unchecked")
     public JSONArray toJSON() throws SQLException {
-
-        // This is the data structure to store all users' information
         JSONArray users_info = new JSONArray();
-        
+
         try (Statement stmt = oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
-            // Your implementation goes here....
-            
-            
-            stmt.close();
+            // Query to get user information
+            String query = "SELECT u.user_id, u.name, u.age, c.city_name AS current_city, h.city_name AS hometown_city " +
+                           "FROM " + userTableName + " u " +
+                           "LEFT JOIN " + currentCityTableName + " cc ON u.user_id = cc.user_id " +
+                           "LEFT JOIN " + cityTableName + " c ON cc.city_id = c.city_id " +
+                           "LEFT JOIN " + hometownCityTableName + " hc ON u.user_id = hc.user_id " +
+                           "LEFT JOIN " + cityTableName + " h ON hc.city_id = h.city_id";
+
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                JSONObject user = new JSONObject();
+                user.put("user_id", rs.getString("user_id"));
+                user.put("name", rs.getString("name"));
+                user.put("age", rs.getInt("age"));
+                user.put("current_city", rs.getString("current_city"));
+                user.put("hometown_city", rs.getString("hometown_city"));
+
+                // Query to get friends of the user
+                String friendsQuery = "SELECT f.friend_id FROM " + friendsTableName + " f WHERE f.user_id = '" + rs.getString("user_id") + "'";
+                ResultSet friendsRs = stmt.executeQuery(friendsQuery);
+                JSONArray friends = new JSONArray();
+                while (friendsRs.next()) {
+                    friends.put(friendsRs.getString("friend_id"));
+                }
+                user.put("friends", friends);
+
+                users_info.put(user);
+            }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
