@@ -43,70 +43,71 @@ public class GetData {
 
         // This is the data structure to store all users' information
         JSONArray users_info = new JSONArray();
-
+        
         try (Statement stmt = oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             // Your implementation goes here....
-            String user_query = "SELECT USER_ID, FIRST_NAME, LAST_NAME, GENDER, YEAR_OF_BIRTH, MONTH_OF_BIRTH, DAY_OF_BIRTH FROM " + userTableName;
-            ResultSet user_rs = stmt.executeQuery(user_query);
-
-            while (user_rs.next()) {
-                JSONObject user = new JSONObject();
-                user.put("user_id", user_rs.getString("USER_ID"));
-                user.put("first_name", user_rs.getString("FIRST_NAME"));
-                user.put("last_name", user_rs.getString("LAST_NAME"));
-                user.put("gender", user_rs.getString("GENDER"));
-                user.put("YOB", user_rs.getInt("YEAR_OF_BIRTH"));
-                user.put("MOB", user_rs.getInt("MONTH_OF_BIRTH"));
-                user.put("DOB", user_rs.getInt("DAY_OF_BIRTH"));
-
-                JSONArray friends = new JSONArray();
+            ResultSet users = stmt.executeQuery(
+                "SELECT USER_ID, FIRST_NAME, LAST_NAME, GENDER, YEAR_OF_BIRTH, MONTH_OF_BIRTH, DAY_OF_BIRTH " +
+                "FROM " + userTableName);
+            while(users.next()){
+                JSONObject userObj = new JSONObject();
+                int userId = users.getInt(1);
+                userObj.put("user_id", userId);
+                userObj.put("first_name", users.getString(2));
+                userObj.put("last_name", users.getString(3));
+                userObj.put("gender", users.getString(4));
+                userObj.put("YOB", users.getInt(5));
+                userObj.put("MOB", users.getInt(6));
+                userObj.put("DOB", users.getInt(7));
+                
+                JSONArray friendsArray = new JSONArray();
                 try (Statement friendstmt = oracleConnection.createStatement()){
-                    String friends_query = "SELECT USER2_ID FROM " + friendsTableName + " WHERE USER1_ID = " + user_rs.getString("USER_ID");
-                    ResultSet friends_rs = friendstmt.executeQuery(friends_query);
-                    while (friends_rs.next()) {
-                        friends.put(friends_rs.getInt("USER2_ID"));
+                    ResultSet friendsrst = friendstmt.executeQuery(
+                        "SELECT user2_id AS user_id " +
+                        "FROM " + friendsTableName + " " +
+                        "WHERE user1_id = " + userId + " AND user2_id > " + userId);
+                    while(friendsrst.next()){
+                        friendsArray.put(friendsrst.getInt(1));
                     }
-                    friends_rs.close();
+                    friendsrst.close();
                 }
-                user.put("friends", friends);
+                userObj.put("friends", friendsArray);
 
-                JSONObject hometown = new JSONObject();
+                JSONObject hometownCityObj = new JSONObject();
                 try (Statement hometownstmt = oracleConnection.createStatement()){
-                    String hometown_query = 
+                    ResultSet hometown = hometownstmt.executeQuery(
                         "SELECT C.CITY_NAME, C.STATE_NAME, C.COUNTRY_NAME " + 
                         "FROM " + cityTableName + " C " +
                         "JOIN " + hometownCityTableName + " H ON C.CITY_ID = H.HOMETOWN_CITY_ID " +
-                        "WHERE H.USER_ID = " + user_rs.getString("USER_ID");
-                    ResultSet hometown_rs = hometownstmt.executeQuery(hometown_query);
-                    while (hometown_rs.next()) {
-                        hometown.put("city", hometown_rs.getString("CITY_NAME"));
-                        hometown.put("state", hometown_rs.getString("STATE_NAME"));
-                        hometown.put("country", hometown_rs.getString("COUNTRY_NAME"));
+                        "WHERE H.USER_ID = " + userId);
+                    while(hometown.next()){
+                        hometownCityObj.put("city", hometown.getString(1));
+                        hometownCityObj.put("state", hometown.getString(2));
+                        hometownCityObj.put("country", hometown.getString(3));
                     }
-                    hometown_rs.close();
+                    hometown.close();
                 }
-                user.put("hometown", hometown);
+                userObj.put("hometown", hometownCityObj);
 
-                JSONObject current = new JSONObject();
+                JSONObject currentCityObj = new JSONObject();
                 try (Statement currentstmt = oracleConnection.createStatement()){
-                    String current_query = 
+                    ResultSet current = currentstmt.executeQuery(
                         "SELECT C.CITY_NAME, C.STATE_NAME, C.COUNTRY_NAME " + 
                         "FROM " + cityTableName + " C " +
                         "JOIN " + currentCityTableName + " H ON C.CITY_ID = H.CURRENT_CITY_ID " +
-                        "WHERE H.USER_ID = " + user_rs.getString("USER_ID");
-                    ResultSet current_rs = currentstmt.executeQuery(current_query);
-                    while (current_rs.next()) {
-                        current.put("city", current_rs.getString("CITY_NAME"));
-                        current.put("state", current_rs.getString("STATE_NAME"));
-                        current.put("country", current_rs.getString("COUNTRY_NAME"));
+                        "WHERE H.USER_ID = " + userId);
+                    while(current.next()){
+                        currentCityObj.put("city", current.getString(1));
+                        currentCityObj.put("state", current.getString(2));
+                        currentCityObj.put("country", current.getString(3));
                     }
-                    current_rs.close();
+                    current.close();
                 }
-                user.put("current", current);
+                userObj.put("current", currentCityObj);
 
-                users_info.put(user);
+                users_info.put(userObj);
             }
-            user_rs.close();
+            users.close();
             stmt.close();
         } catch (SQLException e) {
             System.err.println(e.getMessage());

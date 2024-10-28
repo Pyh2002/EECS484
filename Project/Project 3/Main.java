@@ -10,7 +10,7 @@ public class Main {
 
     static String dataType = "PUBLIC";
     static String oracleUserName = "extomato"; // replace with your uniqname
-    static String password = "eecsclass"; // replace with your Oracle password (default: eecsclass)
+    static String password = "pyh20021129"; // replace with your Oracle password (default: eecsclass)
 
     public static void main(String[] args) {
 
