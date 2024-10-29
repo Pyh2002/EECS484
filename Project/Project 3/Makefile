@@ -40,5 +40,8 @@ mongotest:
 	mongo $(uniqname) -u $(uniqname) -p $(password) --host eecs484.eecs.umich.edu < test.js
 	@echo "Local tests in test.js have been run."
 
+test_query5:
+	mongo $(uniqname) -u $(uniqname) -p $(password) --host eecs484.eecs.umich.edu < test_query5.js
+
 clean:
 	rm -f GetData.class Main.class output.json
