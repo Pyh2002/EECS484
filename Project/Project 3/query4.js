@@ -18,7 +18,22 @@ function suggest_friends(year_diff, dbname) {
     db = db.getSiblingDB(dbname);
 
     let pairs = [];
-    // TODO: implement suggest friends
+
+    db.users.find({
+        gender: "male"
+    }).forEach(userA => {
+        db.users.find({
+            gender: "female",
+            hometown: userA.hometown
+        }).forEach(userB => {
+            if (Math.abs(userA.YOB - userB.YOB) < year_diff &&
+                userA.friends.indexOf(userB.user_id) === -1 &&
+                userB.friends.indexOf(userA.user_id) === -1
+            ) {
+                pairs.push([userA.user_id, userB.user_id]);
+            }
+        });
+    });
 
     return pairs;
-}
+} 

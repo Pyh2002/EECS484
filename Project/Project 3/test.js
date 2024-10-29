@@ -1,6 +1,6 @@
-let dbname = "uniqname"; // replace with your uniqname
+let dbname = "extomato"; // replace with your uniqname
 
-function cleanUp(){
+function cleanUp() {
     db.getCollectionNames().forEach((col) => {
         if (col != "users") db.getCollection(col).drop();
     });
@@ -105,13 +105,13 @@ function cleanUp(){
 
     print("=== Test 7 ===");
     {
-    	print("To Test query7, try the following manually");
-	print("launch the mongo shell");
-	print('load query 7 as follows: load("query7.js")');
-	print('Do find on the collection countbymonth');
-	print('It should be sorted by month');
-	print('And it should have an entry that looks something like this');
-	print("{ _id: ObjectId('some UUID in Hex'), bornCount: 70, MOB: 3 }");
+        print("To Test query7, try the following manually");
+        print("launch the mongo shell");
+        print('load query 7 as follows: load("query7.js")');
+        print('Do find on the collection countbymonth');
+        print('It should be sorted by month');
+        print('And it should have an entry that looks something like this');
+        print("{ _id: ObjectId('some UUID in Hex'), bornCount: 70, MOB: 3 }");
     }
     cleanUp();
 

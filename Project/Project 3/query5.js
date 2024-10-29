@@ -10,8 +10,39 @@
 function oldest_friend(dbname) {
     db = db.getSiblingDB(dbname);
 
+    let all_friends = [];
+    db.users.find({}, { user_id: 1, friends: 1, YOB: 1, _id: 0 }).forEach(user => {
+        const userId = user.user_id;
+        user.friends.forEach(friendId => {
+            all_friends.push({ user_id: userId, friends: friendId, YOB: user.YOB });
+            all_friends.push({ user_id: friendId, friends: userId, YOB: user.YOB });
+        });
+    });
+
     let results = {};
-    // TODO: implement oldest friends
+
+    // Group friends by user_id
+    let groupedFriends = {};
+    all_friends.forEach(entry => {
+        if (!groupedFriends[entry.user_id]) {
+            groupedFriends[entry.user_id] = [];
+        }
+        groupedFriends[entry.user_id].push(entry);
+    });
+
+    // Find the oldest friend for each user
+    for (let userId in groupedFriends) {
+        let friends = groupedFriends[userId];
+        if (friends.length > 0) {
+            friends.sort((a, b) => {
+                if (a.YOB === b.YOB) {
+                    return a.friends - b.friends;
+                }
+                return a.YOB - b.YOB;
+            });
+            results[userId] = friends[0].friends;
+        }
+    }
 
     return results;
-}
+} 

@@ -5,7 +5,16 @@
 function find_average_friendcount(dbname) {
     db = db.getSiblingDB(dbname);
 
-    // TODO: calculate the average friend count
+    const users = db.users.find({}, { user_id: 1, friends: 1 }).toArray();
+    
+    let totalFriends = 0;
+    let totalUsers = users.length;
 
-    return 0;
+    users.forEach(user => {
+        totalFriends += user.friends.length;
+    });
+
+    let averageFriendCount = totalUsers > 0 ? totalFriends / totalUsers : 0;
+
+    return averageFriendCount;
 }

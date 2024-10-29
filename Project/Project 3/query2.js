@@ -9,7 +9,22 @@
 function unwind_friends(dbname) {
     db = db.getSiblingDB(dbname);
 
-    // TODO: unwind friends
+    // Create the flat_users collection by unwinding the friends array
+    db.users.aggregate([
+        {
+            $unwind: "$friends"
+        },
+        {
+            $project: {
+                _id: 0,
+                user_id: 1,
+                friends: 1
+            }
+        },
+        {
+            $out: "flat_users"
+        }
+    ]);
 
     return;
 }
