@@ -29,7 +29,6 @@
 
 # Development files
 *.html
-*.js
 *.lmk
 *.pth
 

@@ -51,7 +51,7 @@ public class GetData {
 
             while (user_rs.next()) {
                 JSONObject user = new JSONObject();
-                user.put("user_id", user_rs.getString("USER_ID"));
+                user.put("user_id", user_rs.getInt("USER_ID"));
                 user.put("first_name", user_rs.getString("FIRST_NAME"));
                 user.put("last_name", user_rs.getString("LAST_NAME"));
                 user.put("gender", user_rs.getString("GENDER"));
